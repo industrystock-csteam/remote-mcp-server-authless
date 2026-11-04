@@ -54,6 +54,53 @@ function createServer() {
 		},
 	);
 
+	
+server.registerTool(
+  "python_calculate",
+  {
+    description: "Berechnet das Quadrat einer Zahl mit Python",
+    inputSchema: z.object({
+      zahl: z.number()
+    })
+  },
+  async ({ zahl }) => {
+    try {
+      const url = new URL(
+        "https://python-workers-examples.webmaster-920.workers.dev/calculate"
+      );
+
+      url.searchParams.set("zahl", String(zahl));
+
+      const response = await fetch(url.toString());
+
+      if (!response.ok) {
+        throw new Error(`Python HTTP ${response.status}`);
+      }
+
+      const result = await response.json();
+
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text: JSON.stringify(result)
+          }
+        ]
+      };
+    } catch (error) {
+      return {
+        isError: true,
+        content: [
+          {
+            type: "text" as const,
+            text: String(error)
+          }
+        ]
+      };
+    }
+  }
+);
+
 	return server;
 }
 
