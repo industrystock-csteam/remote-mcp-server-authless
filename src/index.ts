@@ -1,5 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/server";
 import { createMcpHandler } from "agents/mcp/server";
+import { env } from "cloudflare:workers";
 import { z } from "zod";
 
 function createServer() {
@@ -71,7 +72,11 @@ server.registerTool(
 
       url.searchParams.set("zahl", String(zahl));
 
-      const response = await fetch(url.toString());
+      
+const response = await env.PYTHON_WORKER.fetch(
+  url.toString()
+);
+
 
       if (!response.ok) {
         throw new Error(`Python HTTP ${response.status}`);
