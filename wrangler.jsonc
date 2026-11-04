@@ -10,5 +10,10 @@
 	"compatibility_flags": ["nodejs_compat"],
 	"observability": {
 		"enabled": true,
-	},
+	},"services": [
+  {
+    "binding": "PYTHON_WORKER",
+    "service": "python-workers-examples"
+  }
+]
 }
